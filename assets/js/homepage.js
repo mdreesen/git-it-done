@@ -20,6 +20,7 @@ var getUserRepos = function(user) {
         })
         .catch(function(error) {
             // Notice this catch() getting chained onto the end of the then() method
+            // This is when the request fails to get info from github
             alert("Unable to connect to Github");
         });
 }
