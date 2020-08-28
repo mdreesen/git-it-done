@@ -1,3 +1,5 @@
+var languageButtonsEl = document.querySelector("#language-buttons");
+
 var getUserRepos = function(user) {
     // formatting the API url differently from
     // fetch("https://api.github.com/users/octocat/repos").then(function(response)
@@ -124,9 +126,39 @@ var displayRepos = function(repos, searchTerm) {
     }
 };
 
+var getFeaturedRepos = function(language) {
+    var apiUrl = "https://api.github.com/search/repositories?q=" + language + "is:featured&sort=help-wanted-issues";
+
+    fetch(apiUrl).then(function(response) {
+        if (response.ok) {
+            response.json().then(function(data) {
+                displayRepos(data.items, language);
+            });
+        } else {
+            alert("Error: " + response.statusText);
+        }
+    });
+};
+
+var buttonClickHandler = function() {
+    var buttonClickHandler = function(event) {
+        var language = event.target.getAttribute("data-language");
+        console.log(language);
+        if (language) {
+            getFeaturedRepos(language);
+
+            // clear old content
+            repoContainerEl.textContent = "";
+        }
+    }
+}
+
 // this is the eventListener when the submit button is clicked
 // it fires off the formSubmitHandler function
 userFormEl.addEventListener("submit", formSubmitHandler);
 
 // Capturing the form's input data to use elsewhere in the app
 // getUserRepos("github");
+
+// This is the click event listener for the JS, HTML, and CSS buttons
+languageButtonsEl.addEventListener("click", buttonClickHandler);
